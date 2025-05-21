@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: identityiq
+  labels:
+    app: identityiq
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: identityiq
+  template:
+    metadata:
+      labels:
+        app: identityiq
+    spec:
+      containers:
+        - name: identityiq
+          image: docker-sailpoint-identityiq-app
+          imagePullPolicy: Never
+          env:
+            - name: MYSQL_HOST
+              value: mysql
+            - name: MYSQL_ROOT_USER
+              value: root
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: MYSQL_ROOT_PASSWORD
+            - name: TOMCAT_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: TOMCAT_VERSION
+          ports:
+            - containerPort: 8080
+

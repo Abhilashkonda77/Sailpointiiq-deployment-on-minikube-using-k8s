@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          args:
+            - --default-authentication-plugin=mysql_native_password
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: MYSQL_ROOT_PASSWORD
+            - name: TOMCAT_VERSION
+              valueFrom:
+                configMapKeyRef:
+                  name: env
+                  key: TOMCAT_VERSION
+          ports:
+            - containerPort: 3306
+          securityContext:
+            capabilities:
+              add: ["SYS_NICE"]
+

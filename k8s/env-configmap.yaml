@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: env
+  labels:
+    app: identityiq
+data:
+  MYSQL_ROOT_PASSWORD: 53cr3t
+  TOMCAT_VERSION: 9.0.50
+
